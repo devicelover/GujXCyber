@@ -1,0 +1,46 @@
+import joblib
+import pandas as pd
+import numpy as np
+from sentence_transformers import SentenceTransformer
+
+# Load models and encoders
+print("Loading models and encoders...")
+category_model = joblib.load("models/optimized_crime_classification_model.joblib")
+sub_category_model = joblib.load("models/sub_category_model.joblib")
+category_encoder = joblib.load("models/category_encoder.joblib")
+sub_category_encoder = joblib.load("models/sub_category_encoder.joblib")
+embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
+
+def get_text_embeddings(texts):
+    """Generates sentence embeddings for batch processing."""
+    embeddings = embedding_model.encode(texts, convert_to_tensor=True).cpu().detach().numpy()
+    return embeddings
+
+# Load test data
+print("Reading test data...")
+df = pd.read_csv("data/test.csv")
+
+# Ensure required column exists
+if 'crimeaditionalinfo' not in df.columns:
+    raise ValueError("CSV file must contain a 'crimeaditionalinfo' column.")
+
+# Remove empty descriptions
+df['crimeaditionalinfo'] = df['crimeaditionalinfo'].fillna('').astype(str)
+df = df[df['crimeaditionalinfo'].str.strip() != '']
+
+if df.empty:
+    raise ValueError("No valid descriptions found in CSV.")
+
+# Generate embeddings
+print("Generating embeddings...")
+X_transformed = get_text_embeddings(df['crimeaditionalinfo'].tolist())
+
+# Make predictions
+print("Making predictions...")
+df['Predicted Category'] = category_encoder.inverse_transform(category_model.predict(X_transformed))
+df['Predicted Sub-category'] = sub_category_encoder.inverse_transform(sub_category_model.predict(X_transformed))
+
+# Save results
+output_file = "data/test_classified.csv"
+df.to_csv(output_file, index=False)
+print(f"Classification complete! Results saved to {output_file}")

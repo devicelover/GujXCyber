@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container-fluid result-container">
+    <h2 class="font-weight-bold">Classification Result</h2>
+    <p><strong>Description:</strong> {{ description }}</p>
+    <p><strong>Predicted Category:</strong> {{ category }}</p>
+    <p><strong>Predicted Sub-category:</strong> {{ sub_category }}</p>
+    <a href="{{ url_for('index') }}" class="btn btn-secondary btn-block mt-3">Back</a>
+</div>
+{% endblock %}

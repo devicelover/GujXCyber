@@ -1,0 +1,101 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container-fluid">
+  <div class="page-title">
+    <h2 class="font-weight-bold">Report Cyber Crime</h2>
+  </div>
+  <div class="row">
+    <!-- Main Form Section -->
+    <div class="col-md-8">
+      <ul class="nav nav-tabs custom-tabs" id="reportTab" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" id="text-tab" data-toggle="tab" href="#text" role="tab">Text Input</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="file-tab" data-toggle="tab" href="#file" role="tab">Upload CSV</a>
+        </li>
+      </ul>
+      <div class="tab-content">
+        <!-- Text Input Tab -->
+        <div class="tab-pane fade show active" id="text" role="tabpanel">
+          <form id="description-form" method="POST" action="{{ url_for('index') }}" class="form-section">
+            <label class="font-weight-bold">Enter Crime Description:</label>
+            <textarea class="form-control" id="description" name="description" rows="5"></textarea>
+            <button type="submit" name="text_input" class="btn btn-primary btn-block">Submit</button>
+          </form>
+        </div>
+        <!-- File Upload Tab -->
+        <div class="tab-pane fade" id="file" role="tabpanel">
+          <form id="csv-upload-form" method="POST" action="{{ url_for('upload_csv') }}" enctype="multipart/form-data" class="form-section">
+            <label for="file-upload" class="font-weight-bold">Upload CSV File:</label>
+            <input type="file" class="form-control-file" id="file-upload" name="file" accept=".csv" required>
+            <button type="submit" name="file_input" class="btn btn-primary btn-block">Process File</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Instruction Section (Endless Scrolling) -->
+    <div class="col-md-4">
+      <div class="instructions-section">
+        <h4 class="instructions-heading">Instructions</h4>
+        <div class="scroll-container">
+          <div class="scroll-content">
+            <div class="instruction-item">
+              <p><strong>❌ Don't Be Vague:</strong></p>
+              <p>❌ "Mujhe dikkat hui."</p>
+              <p>✔️ "WhatsApp par phishing link aaya, ₹1,000 ka fraud ho gaya."</p>
+            </div>
+            <div class="instruction-item">
+              <p><strong>❌ Don't Forget Details:</strong></p>
+              <p>❌ "Paise cut gaye."</p>
+              <p>✔️ "₹2,000 unauthorized withdrawal 10 Nov ko Paytm account se hua."</p>
+            </div>
+            <div class="instruction-item">
+              <p><strong>❌ Don't Skip Platforms:</strong></p>
+              <p>❌ "Mujhse fraud hua."</p>
+              <p>✔️ "Fake cashback link mujhe SMS ke through mila aur ₹1,500 ka loss hua."</p>
+            </div>
+            <div class="instruction-item">
+              <p><strong>❌ Don't Generalize:</strong></p>
+              <p>❌ "Scam occurred."</p>
+              <p>✔️ "I received a fake cashback offer via SMS; ₹1,000 was debited."</p>
+            </div>
+            <!-- Duplicate items for seamless scrolling -->
+            <div class="instruction-item">
+              <p><strong>❌ Don't Be Vague:</strong></p>
+              <p>❌ "Mujhe dikkat hui."</p>
+              <p>✔️ "WhatsApp par phishing link aaya, ₹1,000 ka fraud ho gaya."</p>
+            </div>
+            <div class="instruction-item">
+              <p><strong>❌ Don't Forget Details:</strong></p>
+              <p>❌ "Paise cut gaye."</p>
+              <p>✔️ "₹2,000 unauthorized withdrawal 10 Nov ko Paytm account se hua."</p>
+            </div>
+            <div class="instruction-item">
+              <p><strong>❌ Don't Skip Platforms:</strong></p>
+              <p>❌ "Mujhse fraud hua."</p>
+              <p>✔️ "Fake cashback link mujhe SMS ke through mila aur ₹1,500 ka loss hua."</p>
+            </div>
+            <div class="instruction-item">
+              <p><strong>❌ Don't Generalize:</strong></p>
+              <p>❌ "Scam occurred."</p>
+              <p>✔️ "I received a fake cashback offer via SMS; ₹1,000 was debited."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Loading Overlay for CSV Processing -->
+<div id="loading-overlay">
+  <div id="loading-content">
+    <div class="spinner-border text-primary" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+    <p>Processing CSV...</p>
+  </div>
+</div>
+{% endblock %}
